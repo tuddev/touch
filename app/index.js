@@ -47,7 +47,7 @@
   });
 
   async function connectToServer() {
-    const ws = new WebSocket("wss://touch-uwfc.onrender.com/");
+    const ws = new WebSocket("ws://touch-uwfc.onrender.com:10000");
     console.log(ws);
     return new Promise((resolve, reject) => {
       const timer = setInterval(() => {
