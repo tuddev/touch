@@ -1,14 +1,7 @@
 const WebSocket = require("ws");
-const express = require("express");
 
-const PORT = 7071;
-const INDEX = "/index.html";
-
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-const wss = new WebSocket.Server({ server });
+const PORT = process.env.PORT || 3000;
+const wss = new WebSocket.Server({ port: PORT });
 const clients = new Map();
 
 const state = {
@@ -21,7 +14,6 @@ wss.on("connection", (ws) => {
   const metadata = { id, state: initialState };
 
   clients.set(ws, metadata);
-
   ws.on("message", (messageAsString) => {
     const message = JSON.parse(messageAsString);
     const getUser = (id) => state.room1.find((user) => user.id === id);
@@ -65,6 +57,9 @@ wss.on("connection", (ws) => {
         client.send(JSON.stringify({ state: state.room1 }));
       });
   });
+
+  ws.send("Hello! Message From Server!!");
+
 });
 
 wss.on("close", (ws) => {
